@@ -14,19 +14,29 @@ import random
 import os
 # MySQL 연결 정보
 db_host = "my8002.gabiadb.com"
-db_user = "amsdb"
-db_password = "ghrn1004!!"
 db_name = "amsdb"  # 여기에 실제 사용하는 데이터베이스 이름을 입력하세요
 
 
+def load_credentials(file_path):
+    credentials = {}
+    with open(file_path, 'r') as file:
+        for line in file:
+            key, value = line.strip().split(': ')
+            credentials[key] = value
+    return credentials
 # Tkinter 애플리케이션 클래스 정의
 class ProductManagementApp:
-    driver = ''
+
+
+
     def dbConn(self):
+        credentials_file_path = 'pwd.txt'
+        credentials  = load_credentials(credentials_file_path)
+
         self.conn = mysql.connector.connect(
             host=db_host,
-            user=db_user,
-            password=db_password,
+            user=credentials['ID'],
+            password=credentials['PWD'],
             database=db_name
         )
         self.conn.autocommit = True  # 자동 커밋 모드 활성화
