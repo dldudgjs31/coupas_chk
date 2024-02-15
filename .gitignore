@@ -6,4 +6,5 @@
 *.iml
 out
 gen
-pwd.txt
+/pwd.txt
+/key.txt
