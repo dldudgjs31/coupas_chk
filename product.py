@@ -15,11 +15,19 @@ import os
 import time
 import json
 from time import gmtime, strftime
+import Levenshtein
+
+str1 = "[24SS 최신상] 아뜰리에 마졸리 클래식 트위드 재킷 1종"
+str2 = "더엣지 심플 트위드 재킷"
+
+similarity_ratio = Levenshtein.ratio(str1, str2)
+print("Similarity Ratio:", similarity_ratio)
+
 
 REQUEST_METHOD = "GET"
 DOMAIN = "https://api-gateway.coupang.com"
-keyword = urllib.parse.quote("누룽지 가마솥")
-URL = f"/v2/providers/affiliate_open_api/apis/openapi/products/search?keyword={keyword}&limit=1"
+keyword = urllib.parse.quote("[24SS 최신상] 아뜰리에 마졸리 클래식 트위드 재킷 1종")
+URL = f"/v2/providers/affiliate_open_api/apis/openapi/products/search?keyword={keyword}&limit=5"
 
 def load_credentials(file_path):
     credentials = {}
@@ -57,5 +65,9 @@ resposne = requests.request(method=REQUEST_METHOD, url=url,
                             )
 pretty_json = json.dumps(resposne.json(), indent=2, ensure_ascii=False)
 print(pretty_json)
-
-{'code': 'ERROR', 'message': 'Invalid signature.', 'transactionId': '69725215-e17f-4591-956e-a10878eb4098'}
+print(resposne.json()['data']['productData'][0]['productName'])
+for x in range(5):
+    string1 = "클래식 트위드 재킷 아뜰리에 마졸리"
+    string2 = str(resposne.json()['data']['productData'][x]['productName'])
+    similarity_ratio = Levenshtein.ratio(string1, string2)
+    print(f"Similarity {x}번째 Ratio:", similarity_ratio)
